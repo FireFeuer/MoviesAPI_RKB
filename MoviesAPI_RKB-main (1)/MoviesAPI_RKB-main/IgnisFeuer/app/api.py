@@ -45,7 +45,7 @@ def update_top10():
     R = popular["avg_rating"]
     m = v.quantile(quantile)
     c = R.mean()
-    popular['w_score'] = (((v * R) + (m * c)) / (v + m))
+    popular['w_score'] = ((v * R) + (m * c)) / (v + m)
 
     popular.drop(columns="avg_rating", inplace=True)
     popular.drop(columns="count_rating", inplace=True)
