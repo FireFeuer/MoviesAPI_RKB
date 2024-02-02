@@ -49,6 +49,8 @@ def update_top10():
 
     popular.drop(columns="avg_rating", inplace=True)
     popular.drop(columns="count_rating", inplace=True)
+    if "w_score" in MOVIES.columns:
+        MOVIES.drop(columns="w_score", inplace=True)
     MOVIES = MOVIES.merge(popular, on='title')
     print("update_top10")
     return popular.sort_values('w_score', ascending=False).head(count_head)
