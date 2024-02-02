@@ -5,14 +5,15 @@ import numpy as np
 from sklearn.neighbors import NearestNeighbors
 
 app = Flask(__name__)
-api = Api(app)
 
 MOVIES = pd.DataFrame()
 RATING = pd.DataFrame()
 MOVIES_RATING = pd.DataFrame()
+USERS_PIVOT = []
 
 quantile = 0.9
 count_points = 198
+count_head = 10
 
 
 def loading():
@@ -21,6 +22,7 @@ def loading():
     RATING = pd.read_csv(r"../Data_API/rating.csv")
     print("loading")
 
+
 def update_movies_rating():
     global MOVIES_RATING
 
@@ -28,6 +30,7 @@ def update_movies_rating():
     MOVIES_RATING.drop(columns="timestamp", inplace=True)
     MOVIES_RATING.drop(columns="genres", inplace=True)
     print("update_movies_rating")
+
 
 def update_top10():
 
@@ -48,10 +51,10 @@ def update_top10():
     popular.drop(columns="count_rating", inplace=True)
     MOVIES = MOVIES.merge(popular, on='title')
     print("update_top10")
-    return popular.sort_values('w_score', ascending=False).head(10)
+    return popular.sort_values('w_score', ascending=False).head(count_head)
 
 
-def get_user_movies():
+def update_user_movies():
     global MOVIES_RATING
 
     active_users = MOVIES_RATING[MOVIES_RATING['userId'].map(MOVIES_RATING['userId'].value_counts()) > count_points]
@@ -62,7 +65,8 @@ def get_user_movies():
     return users_pivot
 
 
-def get_movie_recommendations(movie_title, users_pivot, num_recommendations=5):
+def update_movie_recommendations(movie_title, users_pivot, num_recommendations=5):
+    update_top10()
     # Создаем экземпляр модели
     model_knn_movies = NearestNeighbors(metric='cosine', algorithm='brute', n_neighbors=5, n_jobs=-1)
 
@@ -98,16 +102,17 @@ def get_movie_recommendations(movie_title, users_pivot, num_recommendations=5):
 
     print("get_movie_recommendations")
 
-    return recommendations_df.head(10)
+    return recommendations_df.head(count_head)
 
 
-def get_movie_from_genre(name_genre):
+def update_movie_from_genre(name_genre):
+    update_top10()
     genres = {"movieId": [], "genres": [], "w_score": [], "title": []}
     for index, row in MOVIES.iterrows():
         a = row["genres"].split("|")
         for j in a:
             genres["movieId"].append(row["movieId"])
-            genres["genres"].append(j)
+            genres["genres"].append(j.lower())
             genres["w_score"].append(row["w_score"])
             genres["title"].append(row["title"])
 
@@ -130,12 +135,53 @@ def get_movie_from_genre(name_genre):
     popularite.drop(columns="count_rating", inplace=True)
 
     print("get_movie_from_genre")
-    return popularite.head(10)
+    return popularite.head(count_head)
 
-loading() # обезательно
-update_movies_rating() # обезательно
+
+@app.route('/top', methods=['GET'])
+def get_top():
+    top10 = update_top10()
+    result = [{'title': row["title"], 'w_score': row['w_score']} for index, row in top10.iterrows()]
+    return jsonify({'Топ 10 фильмов': result})
+
+
+@app.route('/genre/<name_genre>', methods=['GET'])
+def get_genre_name(name_genre):
+
+    genre10 = update_movie_from_genre(name_genre)
+
+    if len(genre10) < 1:
+        return jsonify({'message': 'Genre not found'})
+
+    result = [{'title': row["title"], 'w_score': row['w_score']} for index, row in genre10.iterrows()]
+    return jsonify({name_genre: result})
+
+
+@app.route('/movie/<name_movie>', methods=['GET'])
+def get_movie_name(name_movie):
+
+    movie10 = update_movie_recommendations(name_movie, update_user_movies())
+
+    if len(movie10) < 1:
+        return jsonify({'message': 'Movie not found'})
+
+    result = [{'title': row["title"], 'w_score': row['w_score']} for index, row in movie10.iterrows()]
+    return jsonify({"Рекомедации по фильму: " + name_movie: result})
+
+
+if __name__ == '__main__':
+    loading()  # обезательно
+    update_movies_rating()  # обезательно
+    api = Api(app)
+
+    app.run(debug=True, host='0.0.0.0', port=5000)
+
+
+# loading() # обезательно
+# update_movies_rating() # обезательно
 # update_top10()
-
-print(update_top10()) # обновить рейтинг
-print(get_movie_recommendations("Shawshank Redemption, The (1994)" , get_user_movies())) # получить по фильму
-print(get_movie_from_genre("Animation"))
+# #
+# # # print(update_top10()) # обновить рейтинг
+# print(update_user_movies())
+# print(update_movie_recommendations("Shawshank Redemption, The (1994)", update_user_movies())) # получить по фильму
+# # print(update_movie_from_genre("Animation"))
