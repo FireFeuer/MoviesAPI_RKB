@@ -3,6 +3,7 @@ import requests
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QLineEdit, QHBoxLayout, QVBoxLayout, QWidget, QGridLayout, QComboBox
 from PyQt5.QtCore import Qt
 import pandas as pd
+import re
 
 # <<<<<<< HEAD
 class MainWindow(QMainWindow):
@@ -181,11 +182,13 @@ class MainWindow(QMainWindow):
             self.combo_box.clear()
             self.top10_view()
         else:
-            matching_titles = MOVIES[MOVIES['title'].str.contains(text, case=False)]['title']
+            # Экранируем спецсимволы в тексте
+            escaped_text = re.escape(text.strip())
+            matching_titles = MOVIES[MOVIES['title'].str.contains(escaped_text, case=False)]['title']
             self.combo_box.clear()
             self.combo_box.addItems(matching_titles)
 
-print(similar_movies_regex(list_column,'These Amazing '))
+# print(similar_movies_regex(list_column,'These Amazing '))
 
 
 # <<<<<<< HEAD
