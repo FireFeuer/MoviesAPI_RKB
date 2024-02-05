@@ -246,13 +246,13 @@ class GenresWindow(QMainWindow):
         button_search.clicked.connect(self.search_movie)
         header_layout.addWidget(button_search)
 
-        button_genres = QPushButton("На главную", self)
-        button_genres.setStyleSheet("background-color: #FFBE00; border: none; padding: 10px; border-radius: 5px;")
-        button_genres.clicked.connect(self.open_main_window)
-
+        button_main = QPushButton("На главную", self)
+        button_main.setStyleSheet("background-color: #FFBE00; border: none; padding: 10px; border-radius: 5px;")
+        button_main.clicked.connect(self.open_main_window)
+        self.dialog = self.parent()
 
        
-        header_layout.addWidget(button_genres, alignment=Qt.AlignRight)
+        header_layout.addWidget(button_main, alignment=Qt.AlignRight)
 
         # Главное вертикальное расположение
         main_layout = QVBoxLayout()
