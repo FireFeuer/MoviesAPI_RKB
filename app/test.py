@@ -72,8 +72,6 @@ class MainWindow(QMainWindow):
 #     return 'None'
 # >>>>>>> 2f5d283b98d1f542368b4bb113d3a56c5660dea1
 
-
-
         self.top10_view()
 
         main_layout.addWidget(header_widget)
@@ -112,6 +110,8 @@ class MainWindow(QMainWindow):
             if col >= 4:
                 col = 0
                 row += 1
+            self.title_label1 = QLabel(" ", self)
+            self.movies_layout.addWidget(self.title_label1, 7, 0, 7, 0)
 
 
     def open_genres_window(self):
@@ -157,6 +157,9 @@ class MainWindow(QMainWindow):
                 if col >= 4:
                     col = 0
                     row += 1
+                self.title_label1 = QLabel(" ", self)
+                self.movies_layout.addWidget(self.title_label1, 7, 0, 7, 0)
+
         else:
             print(f"Ошибка при обращении к API. Статус код: {response.status_code}")
 
