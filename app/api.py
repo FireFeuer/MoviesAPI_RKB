@@ -18,8 +18,8 @@ count_head = 10
 
 def loading():
     global MOVIES, RATING
-    MOVIES = pd.read_csv(r"../Data_API/movies.csv")
-    RATING = pd.read_csv(r"../Data_API/rating.csv")
+    MOVIES = pd.read_csv(r"movies.csv")
+    RATING = pd.read_csv(r"rating.csv")
     print("loading")
 
 
@@ -169,6 +169,7 @@ def get_movie_name(name_movie):
 
     result = [{'title': row["title"], 'w_score': row['w_score']} for index, row in movie10.iterrows()]
     return jsonify({"Рекомедации по фильму: " + name_movie: result})
+
 
 
 if __name__ == '__main__':
