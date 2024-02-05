@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QLin
 from PyQt5.QtCore import Qt
 import pandas as pd
 
+# <<<<<<< HEAD
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -60,6 +61,15 @@ class MainWindow(QMainWindow):
         self.movies_widget.setStyleSheet("background-color: #25182E;")
         self.movies_layout = QGridLayout(self.movies_widget)
         self.movies_layout.setContentsMargins(0, 0, 0, 0)
+# =======
+# def similar_movies_regex(movie_list, regex_pattern):
+#     regex_pattern = re.compile(regex_pattern, re.IGNORECASE)
+#     for movie in movie_list:
+#         match = regex_pattern.search(movie)
+#         if match:
+#             return movie
+#     return 'None'
+# >>>>>>> 2f5d283b98d1f542368b4bb113d3a56c5660dea1
 
 
 
@@ -175,8 +185,10 @@ class MainWindow(QMainWindow):
             self.combo_box.clear()
             self.combo_box.addItems(matching_titles)
 
+print(similar_movies_regex(list_column,'These Amazing '))
 
 
+# <<<<<<< HEAD
 MOVIES = []
 
 
@@ -191,3 +203,5 @@ if __name__ == '__main__':
     main_window = MainWindow()
     main_window.show()
     sys.exit(app.exec_())
+# =======
+# >>>>>>> 2f5d283b98d1f542368b4bb113d3a56c5660dea1
