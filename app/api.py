@@ -18,8 +18,8 @@ count_head = 10
 
 def loading():
     global MOVIES, RATING
-    MOVIES = pd.read_csv(r"../Data_API/movies.csv")
-    RATING = pd.read_csv(r"../Data_API/rating.csv")
+    MOVIES = pd.read_csv(r"movies.csv")
+    RATING = pd.read_csv(r"rating.csv")
     print("loading")
 
 

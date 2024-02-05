@@ -10,8 +10,8 @@ def similar_movies_regex(movie_list, regex_pattern):
     for movie in movie_list:
         match = regex_pattern.search(movie)
         if match:
-            return True
-    return False
+            return movie
+    return 'None'
 
 
 
@@ -22,10 +22,6 @@ df = pd.read_csv(csv_path)
 column = df['title']
 list_column = list(column)
 
+print(similar_movies_regex(list_column,'These Amazing '))
 
 
-
-if similar_movies_regex(list_column, 'These Amazing '):
-    print('Фильм найден!')
-else:
-    print('Фильм не найден.')

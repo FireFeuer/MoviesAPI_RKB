@@ -6,6 +6,34 @@ import requests
 import ctypes as ct
 from tkinter.font import Font
 from functools import partial
+import re
+import os
+import pandas as pd
+
+def top10():
+    api_uri = ''
+    movies = []
+    movie_name = similar_movies_regex(list_column, entry.get())
+    if(movie_name == 'None'):
+        movies = [("", "")]
+    else:
+        api_uri = API_URL_movie + movie_name
+        response = requests.get(api_uri)
+        data = json.loads(response.content.decode('utf-8'))
+        for movie in data:
+            movies.append((movie[0], movie[1]))
+        print(data)
+        tree.bind('<B1-Motion>', partial(motion_handler, tree))
+        motion_handler(tree, None)   
+
+def similar_movies_regex(movie_list, regex_pattern):
+    regex_pattern = re.compile(regex_pattern, re.IGNORECASE)
+    for movie in movie_list:
+        match = regex_pattern.search(movie)
+        if match:
+            return movie
+    return 'None'
+
 
 def createMainWindow():
     pass
@@ -14,7 +42,7 @@ def createChooseGenreWindow():
     root.withdraw()
 
 
-    chooseWindow = tk.Tk()
+    chooseWindow = tk.Toplevel()
     frm = ttk.Frame(chooseWindow, padding=10)
     chooseWindow.geometry('440x310+200+102')
 
@@ -49,19 +77,18 @@ def createChooseGenreWindow():
     button_TransitionToGenres.config(text="К жанрам", fg="white")
 
     data = [
-        ("1", "Inception", "8.8", "star.jpg"),
-        ("2", "The Dark Knight", "9.0", "star.jpg"),
-        ("3", "Toy Story", "8.3", "star.jpg"),
-        ("4", "Interstellar", "8.6", "star.jpg"),
-        ("5", "Pirates of the Caribbean", "7.9", "star.jpg"),
+        ("Inception", "8.8"),
+        ("The Dark Knight", "9.0"),
+        ("Toy Story", "8.3"),
+        ("Interstellar", "8.6"),
+        ("Pirates of the Caribbean", "7.9"),
     ]
 
-    tree = ttk.Treeview(show='', columns=('number', 'title', 'rating', 'icon'))
+    tree = ttk.Treeview(show='', columns=('title', 'rating'))
     tree.column('#0', width=0, stretch=NO)
-    tree.column('number', anchor=W, width=0)
     tree.column('title', anchor=CENTER, width=90)
     tree.column('rating', anchor=E, width=50)
-    tree.column('icon', anchor=W, width=70)
+
 
     for item in data:
         tree.insert('', 'end', text='Inception', values=item)
@@ -108,11 +135,16 @@ def motion_handler(tree, event):
 
 
 
+current_dir = os.path.dirname(os.path.realpath(sys.argv[0]))
 
+csv_path = current_dir + '\movies.csv'
+df = pd.read_csv(csv_path)
+column = df['title']
+list_column = list(column)
 
 
 API_URL_top = "http://192.168.138.222:5000/top"
-API_URL_movie = "http://192.168.138.222:5000/movie/"
+API_URL_movie = "http://127.0.0.1:5000/movie/"
 
 
 # НАЧАЛО РАБОТЫ С ГЛАВНЫМ ОКНОМ 
@@ -145,6 +177,11 @@ label_Recommendation = tk.Label(root,
 
 label_Recommendation.grid(row=1, column=0, padx=9, pady=6, sticky="w")
 
+entry  = ttk.Entry(root)
+entry.grid(column=1, row=1, padx=0, sticky='w')
+
+button_searcher = tk.Button(root, text='поиск', command = top10)
+button_searcher.grid(column=2, row=1, padx=0, sticky='w')
 
 loadimage = tk.PhotoImage(file="button_to_genres.png")
 button_TransitionToGenres = tk.Button(root, image=loadimage, command=createChooseGenreWindow)
@@ -156,27 +193,22 @@ button_TransitionToGenres.config(text="К жанрам", fg="white")
 
 
 
-data = [
-("1", "Inception", "8.8", "star.jpg"),
-("2", "The Dark Knight", "9.0", "star.jpg"),
-("3", "Toy Story", "8.3", "star.jpg"),
-("4", "Interstellar", "8.6", "star.jpg"),
-("5", "Pirates of the Caribbean", "7.9", "star.jpg"),
-]
 
-tree = ttk.Treeview(show='', columns=('number', 'title', 'rating', 'icon'))
+
+
+
+
+
+tree = ttk.Treeview(show='', columns=('title', 'rating'))
 tree.column('#0', width=0, stretch=NO)
-tree.column('number', anchor=W, width=0)
 tree.column('title', anchor=CENTER, width=90)
 tree.column('rating', anchor=E, width=50)
-tree.column('icon', anchor=W, width=70)
 
-for item in data:
-    tree.insert('', 'end', text='Inception', values = item)
+
+
 tree.grid(column=0, row=2, padx=0, pady=40)
 
-tree.bind('<B1-Motion>', partial(motion_handler, tree))
-motion_handler(tree, None)   # Perform initial wrapping
+
 
 root.mainloop()
 
