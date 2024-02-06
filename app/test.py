@@ -6,12 +6,6 @@ import pandas as pd
 import re
 
 
-
-
-
-    
-
-
 # <<<<<<< HEAD
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -31,6 +25,12 @@ class MainWindow(QMainWindow):
         label_main = QLabel("Главная", self)
         label_main.setStyleSheet("color: white; font-size: 34px; padding: 10px;")
         header_layout.addWidget(label_main)
+
+        button_question = QPushButton("СПРАВКА", self)
+        button_question.setStyleSheet("background-color: #FFFE00; border: none; padding: 12px; border-radius: 2px;")
+        button_question.clicked.connect(self.open_question_window)
+        header_layout.addWidget(button_question, alignment=Qt.AlignLeft)
+        self.dialog = QuestionWindow(self)
 
         # Label "Рекомендации по фильму" в центре шапки
         label_recommendations_header = QLabel("Рекомендации по фильму", self)
@@ -102,6 +102,8 @@ class MainWindow(QMainWindow):
         self.title_label.setStyleSheet("color: white; font-size: 18px; padding: 10px;")
         self.movies_layout.addWidget(self.title_label, 0, 0, 1, 4, alignment=Qt.AlignCenter)
 
+
+
         row, col = 1, 0
         for i, movie in enumerate(api_data["Топ 10 фильмов"]):
             movie_label = QLabel(f"{i + 1}. {movie['title']}", self)
@@ -128,7 +130,9 @@ class MainWindow(QMainWindow):
         self.hide()
         self.dialog.show()
         
-
+    def open_question_window(self):
+        self.hide()
+        self.dialog.show()
         
 
     def search_movie(self):
@@ -145,7 +149,6 @@ class MainWindow(QMainWindow):
                 widget = self.movies_layout.itemAt(i).widget()
                 if widget is not None:
                     widget.setParent(None)
-
 
             self.title_label.setText(f"Рекомедации по фильму: {selected_movie}")
             self.movies_layout.addWidget(self.title_label, 0, 0, 1, 4, alignment=Qt.AlignCenter)
@@ -206,7 +209,6 @@ class MainWindow(QMainWindow):
 class GenresWindow(QMainWindow):
     def __init__(self, parent=None):
         super(GenresWindow, self).__init__(parent)
-
         self.setWindowTitle("Окно жанров")
         self.setGeometry(100, 100, 700, 500)
         self.movies_data = get_data()
@@ -251,7 +253,6 @@ class GenresWindow(QMainWindow):
         button_main.clicked.connect(self.open_main_window)
         self.dialog = self.parent()
 
-       
         header_layout.addWidget(button_main, alignment=Qt.AlignRight)
 
         # Главное вертикальное расположение
@@ -300,12 +301,10 @@ class GenresWindow(QMainWindow):
                 col = 0
                 row += 1
 
-
     def open_main_window(self):
         self.hide()
         self.dialog.show()
         
-
 
     def search_movie(self):
         # Метод, который вызывается при нажатии на кнопку поиска
@@ -378,9 +377,51 @@ class GenresWindow(QMainWindow):
             self.combo_box.addItems(matching_titles)
    
 
+class QuestionWindow(QMainWindow):
+    def __init__(self, parent=None):
+        super(QuestionWindow, self).__init__(parent)
+        self.setWindowTitle("Справка")
+        self.setGeometry(100, 100, 700, 500)
+        self.movies_data = get_data()
+        self.init_ui()
+    def init_ui(self):
+        # Шапка
+        header_widget = QWidget()
+        header_widget.setStyleSheet("background-color: #CA1F3D;")
+        header_layout = QHBoxLayout(header_widget)
+
+        label_main = QLabel("Справка", self)
+        label_main.setStyleSheet("color: white; font-size: 34px; padding: 10px;")
+        header_layout.addWidget(label_main)
+
+        button_main = QPushButton("На главную", self)
+        button_main.setStyleSheet("background-color: #FFBE00; border: none; padding: 10px; border-radius: 5px;")
+        button_main.clicked.connect(self.open_main_window)
+        self.dialog = self.parent()
+
+        self.title_label = QLabel("О программе “Система рекомендаций фильмов”.\n Приложение предназначено для поиска рекомендованных фильмов по названию или жанру."
+                                  "\n Рекомендации по использованию."
+                                  "\n Для того чтобы получить рекомендации к фильму по названию необходимо:"
+                                  "\nНа главной странице ввести название фильма в поисковую строку."
+                                 "Выбрать нужный фильм из выпадающего списка."
+                                    "Нажать на кнопку поиска(🔎)."
+                                    "Для того чтобы получить рекомендации по фильму по жанру необходимо:"
+                                    "Перейти к окну со списком жанров по кнопке “к жанрам” на главной странице."
+                                    "Ввести наименование жанра в поисковую строку."
+                                    "Нажать на кнопку поиска(🔎)"
+                                    "Выбрать нужный жанр.", self)
+        self.title_label.setStyleSheet("color: white; font-size: 18px; padding: 10px;")
+        self.movies_layout.addWidget(self.title_label, 0, 0, 1, 4, alignment=Qt.AlignCenter)
+
+
+
+    def open_main_window(self):
+        self.hide()
+        self.dialog.show()
+
+
 # <<<<<<< HEAD
 MOVIES = []
-
 
 def get_data():
     global MOVIES
