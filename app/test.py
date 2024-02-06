@@ -1,10 +1,11 @@
-import sys
-import requests
-from PyQt5.QtWidgets import QStackedWidget, QApplication, QMainWindow, QLabel, QPushButton, QLineEdit, QHBoxLayout, QVBoxLayout, QWidget, QGridLayout, QComboBox, QTextEdit, QScrollArea
-
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QLineEdit, QHBoxLayout, QVBoxLayout, \
+    QWidget, QGridLayout, QComboBox,  QScrollArea
 from PyQt5.QtCore import Qt
 import pandas as pd
+import requests
+import sys
 import re
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -31,8 +32,6 @@ class MainWindow(QMainWindow):
         label_main.setStyleSheet("color: white; font-size: 34px; padding: 10px;")
         header_layout.addWidget(label_main)
 
-
-
         # Label "Рекомендации по фильму" в центре шапки
         label_recommendations_header = QLabel("Рекомендации по фильму", self)
         label_recommendations_header.setStyleSheet("color: white; font-size: 12px; margin: 10px;")
@@ -53,7 +52,8 @@ class MainWindow(QMainWindow):
 
         # Кнопка поиска с лупой в шапке
         button_search = QPushButton("🔍", self)
-        button_search.setStyleSheet("background-color: #CA1F3D; color: white; border: none; padding: 5px; border-radius: 5px;")
+        button_search.setStyleSheet(
+            "background-color: #CA1F3D; color: white; border: none; padding: 5px; border-radius: 5px;")
         button_search.clicked.connect(self.search_movie)
         header_layout.addWidget(button_search)
 
@@ -62,9 +62,7 @@ class MainWindow(QMainWindow):
         button_genres.clicked.connect(self.open_genres_window)
         self.dialog = GenresWindow(self)
 
-       
         header_layout.addWidget(button_genres, alignment=Qt.AlignRight)
-
         # Главное вертикальное расположение
         main_layout = QVBoxLayout()
 
@@ -87,6 +85,7 @@ class MainWindow(QMainWindow):
     def top10_view(self):
         # Данные с API
         api_data = self.get_api_data()
+
         # Заголовок
         self.title_label = QLabel("Топ 10 фильмов", self)
         self.title_label.setStyleSheet("color: white; font-size: 18px; padding: 10px;")
@@ -116,11 +115,10 @@ class MainWindow(QMainWindow):
     def open_genres_window(self):
         self.hide()
         self.dialog.show()
-        
+
     def open_question_window(self):
         self.hide()
         self.dialog2.show()
-        
 
     def search_movie(self):
         # Метод, который вызывается при нажатии на кнопку поиска
@@ -260,11 +258,6 @@ class GenresWindow(QMainWindow):
         # Удаляем дубликаты жанров и преобразуем в нижний регистр
         unique_genres = list(set(genres))
         unique_genres.sort()  # Сортируем жанры по алфавиту
-
-        # Устанавливаем заголовок
-        # self.title_label.setText("Жанры")
-        # self.title_label.setStyleSheet("color: white; font-size: 18px; padding: 10px;")
-        # self.movies_layout.addWidget(self.title_label, 0, 0, 1, 4, alignment=Qt.AlignCenter)
 
         # Очищаем существующие виджеты
         for i in reversed(range(self.movies_layout.count())):
@@ -435,14 +428,14 @@ class QuestionWindow(QMainWindow):
                        "Приложение предназначено для поиска рекомендованных фильмов по названию или жанру.\n\n"
                        "Рекомендации по использованию.\n\n"
                        "    Для того чтобы получить рекомендации к фильму по названию необходимо:\n"
-        "На главной странице ввести название фильма в поисковую строку.\n"
-        "Выбрать нужный фильм из выпадающего списка.\n"
-        "Нажать на кнопку поиска(🔎).\n"
-        "   Для того чтобы получить рекомендации по фильму по жанру необходимо:\n"
-        "Перейти к окну со списком жанров по кнопке “к жанрам” на главной странице.\n"
-        "Ввести наименование жанра в поисковую строку.\n"
-        "Нажать на кнопку поиска(🔎)\n"
-        "Выбрать нужный жанр.")
+                       "На главной странице ввести название фильма в поисковую строку.\n"
+                       "Выбрать нужный фильм из выпадающего списка.\n"
+                       "Нажать на кнопку поиска(🔎).\n"
+                       "   Для того чтобы получить рекомендации по фильму по жанру необходимо:\n"
+                       "Перейти к окну со списком жанров по кнопке “к жанрам” на главной странице.\n"
+                       "Ввести наименование жанра в поисковую строку.\n"
+                       "Нажать на кнопку поиска(🔎)\n"
+                       "Выбрать нужный жанр.")
         label2.setStyleSheet("color: #FFFFFF; font-size: 16px; padding: 5px")
         body_layout.addWidget(label2)
 
@@ -451,8 +444,6 @@ class QuestionWindow(QMainWindow):
     def open_main_window(self):
         self.hide()
         self.parent().show()
-
-
 
 
 MOVIES = []
@@ -469,7 +460,3 @@ if __name__ == '__main__':
     main_window = MainWindow()
     main_window.show()
     sys.exit(app.exec_())
-
-    
-
-
