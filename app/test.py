@@ -1,6 +1,6 @@
 import sys
 import requests
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QLineEdit, QHBoxLayout, QVBoxLayout, QWidget, QGridLayout, QComboBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QLineEdit, QHBoxLayout, QVBoxLayout, QWidget, QGridLayout, QComboBox, QTextEdit
 from PyQt5.QtCore import Qt
 import pandas as pd
 import re
@@ -30,7 +30,7 @@ class MainWindow(QMainWindow):
         button_question.setStyleSheet("background-color: #FFFE00; border: none; padding: 12px; border-radius: 2px;")
         button_question.clicked.connect(self.open_question_window)
         header_layout.addWidget(button_question, alignment=Qt.AlignLeft)
-        self.dialog = QuestionWindow(self)
+        self.dialog2 = QuestionWindow(self)
 
         # Label "Рекомендации по фильму" в центре шапки
         label_recommendations_header = QLabel("Рекомендации по фильму", self)
@@ -132,7 +132,7 @@ class MainWindow(QMainWindow):
         
     def open_question_window(self):
         self.hide()
-        self.dialog.show()
+        self.dialog2.show()
         
 
     def search_movie(self):
@@ -383,35 +383,37 @@ class QuestionWindow(QMainWindow):
         self.setWindowTitle("Справка")
         self.setGeometry(100, 100, 700, 500)
         self.movies_data = get_data()
-        self.init_ui()
-    def init_ui(self):
-        # Шапка
-        header_widget = QWidget()
-        header_widget.setStyleSheet("background-color: #CA1F3D;")
-        header_layout = QHBoxLayout(header_widget)
+        central_widget = QWidget(self)
+        self.setCentralWidget(central_widget)
+ 
+        header_widget = QWidget() 
+        header_widget.setStyleSheet("background-color: #CA1F3D;") 
+        layout = QHBoxLayout(header_widget) 
 
-        label_main = QLabel("Справка", self)
-        label_main.setStyleSheet("color: white; font-size: 34px; padding: 10px;")
-        header_layout.addWidget(label_main)
+        label1 = QLabel("Справка")
+        label1.setStyleSheet("color: #FFFFFF; font-size: 24px; background-color: #25182E;")
+        layout.addWidget(label1)
 
-        button_main = QPushButton("На главную", self)
-        button_main.setStyleSheet("background-color: #FFBE00; border: none; padding: 10px; border-radius: 5px;")
-        button_main.clicked.connect(self.open_main_window)
+        button1 = QPushButton("На главную")
+        button1.setStyleSheet("background-color: #FFBE00; border: none; padding: 10px; border-radius: 5px;")
+        button1.clicked.connect(self.open_main_window)
         self.dialog = self.parent()
+        layout.addWidget(button1, alignment=Qt.AlignRight)
 
-        self.title_label = QLabel("О программе “Система рекомендаций фильмов”.\n Приложение предназначено для поиска рекомендованных фильмов по названию или жанру."
-                                  "\n Рекомендации по использованию."
-                                  "\n Для того чтобы получить рекомендации к фильму по названию необходимо:"
-                                  "\nНа главной странице ввести название фильма в поисковую строку."
-                                 "Выбрать нужный фильм из выпадающего списка."
-                                    "Нажать на кнопку поиска(🔎)."
-                                    "Для того чтобы получить рекомендации по фильму по жанру необходимо:"
-                                    "Перейти к окну со списком жанров по кнопке “к жанрам” на главной странице."
-                                    "Ввести наименование жанра в поисковую строку."
-                                    "Нажать на кнопку поиска(🔎)"
-                                    "Выбрать нужный жанр.", self)
-        self.title_label.setStyleSheet("color: white; font-size: 18px; padding: 10px;")
-        self.movies_layout.addWidget(self.title_label, 0, 0, 1, 4, alignment=Qt.AlignCenter)
+        text_edit = QTextEdit()
+        text_edit.setPlainText("О программе “Система рекомендаций фильмов”.\n\n Приложение предназначено для поиска рекомендованных фильмов по названию или жанру.\n\n Рекомендации по использованию.\n\n Для того чтобы получить рекомендации к фильму по названию необходимо:\n"
+        "На главной странице ввести название фильма в поисковую строку.\n"
+        "Выбрать нужный фильм из выпадающего списка.\n"
+        "Нажать на кнопку поиска(🔎).\n"
+        " Для того чтобы получить рекомендации по фильму по жанру необходимо:\n"
+        "Перейти к окну со списком жанров по кнопке “к жанрам” на главной странице.\n"
+        "Ввести наименование жанра в поисковую строку.\n"
+        "Нажать на кнопку поиска(🔎)\n"
+        "Выбрать нужный жанр.")
+        text_edit.setStyleSheet("background-color: #FFFFFF;")
+        layout.addWidget(text_edit)
+
+        central_widget.setLayout(layout)
 
 
 
