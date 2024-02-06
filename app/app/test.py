@@ -451,7 +451,7 @@ MOVIES = []
 
 def get_data():
     global MOVIES
-    MOVIES = pd.read_csv(r"movies.csv")
+    MOVIES = pd.read_csv(r"../data/movies.csv")
     return MOVIES
 
 
