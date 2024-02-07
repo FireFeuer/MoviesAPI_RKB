@@ -111,9 +111,6 @@ class MainWindow(QMainWindow):
             if col >= 4:
                 col = 0
                 row += 1
-        self.title_label1 = QLabel(" ", self)
-        self.title_label1.setStyleSheet("color: white; font-size: 18px; padding: 10px;")
-        self.movies_layout.addWidget(self.title_label1, 7, 0, 7, 0, alignment=Qt.AlignCenter)
 
     def open_genres_window(self):
         self.hide()
@@ -347,9 +344,6 @@ class GenresWindow(QMainWindow):
                 if col >= 4:
                     col = 0
                     row += 1
-            self.title_label1 = QLabel(" ", self)
-            self.title_label1.setStyleSheet("color: white; font-size: 18px; padding: 10px;")
-            self.movies_layout.addWidget(self.title_label1, 7, 0, 7, 0, alignment=Qt.AlignCenter)
         else:
             print(f"Ошибка при обращении к API. Статус код: {response.status_code}")
 
@@ -395,7 +389,6 @@ class GenresWindow(QMainWindow):
             if col >= 2:
                 col = 0
                 row += 1
-
 
 
 class QuestionWindow(QMainWindow):
