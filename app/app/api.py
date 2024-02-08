@@ -171,6 +171,24 @@ def get_movie_name(name_movie):
     return jsonify({"Рекомедации по фильму: " + name_movie: result})
 
 
+@app.route('/genres', methods=['GET'])
+def genres():
+        # Получаем список всех жанров из данных фильмов
+        genres = []
+        for index, row in MOVIES.iterrows():
+            genres.extend(row["genres"].split("|"))
+
+        # Удаляем дубликаты жанров и преобразуем в нижний регистр
+        unique_genres = list(set(genres))
+        unique_genres.sort()  # Сортируем жанры по алфавиту
+        result = [{'ganre': index} for index in genres]
+        return jsonify(result)
+
+@app.route('/movies', methods=['GET'])
+def movies():
+    result = [{'title': row["title"]} for index, row in MOVIES.nunique().iterrows()]
+    return jsonify(result)
+
 
 if __name__ == '__main__':
     loading()  # обезательно
