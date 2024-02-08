@@ -149,27 +149,29 @@ class MainWindow(QMainWindow):
             self.movies_layout.addWidget(self.title_label, 0, 0, 1, 4, alignment=Qt.AlignCenter)
             # Добавляем новые данные из JSON
             row, col = 1, 0
+            row, col = 1, 0
             for i, movie in enumerate(json_data[f"Рекомедации по фильму: {selected_movie}"]):
                 movie_label = QLabel(f"{i + 1}. {movie['title']}", self)
                 movie_label.setStyleSheet(
-                    "background-color: white; color: #25182E; padding: 10px; margin: 5px; border-radius: 5px;")
-                movie_label.setFixedHeight(50)
+                    f"background-color: white; color: #25182E; padding: 7px; margin: 7px; border-radius: 5px; font-size: {font_size1};")
+                movie_label.setFixedHeight(105)
                 self.movies_layout.addWidget(movie_label, row, col)
 
                 score_label = QLabel(f"{movie['w_score']:.2f}", self)
                 score_label.setStyleSheet(
-                    "background-color: #FFBE00; color: #25182E; padding: 10px; margin: 5px; border-radius: 5px;")
+                    f"font-size: {font_size1}; background-color: #FFBE00; color: #25182E; padding: 3px; margin: 7px; border-radius: 5px;")
                 score_label.setAlignment(Qt.AlignCenter)
-                score_label.setFixedHeight(50)
-                score_label.setFixedWidth(50)
+                score_label.setFixedHeight(105)
+                score_label.setFixedWidth(105)
                 self.movies_layout.addWidget(score_label, row, col + 1)
 
                 col += 2
                 if col >= 4:
                     col = 0
                     row += 1
+
             self.title_label1 = QLabel(" ", self)
-            self.title_label1.setStyleSheet("color: white; font-size: 18px; padding: 10px;")
+            self.title_label1.setStyleSheet(f"color: white; font-size: {font_size1};  padding: 10px;")
             self.movies_layout.addWidget(self.title_label1, 7, 0, 7, 0, alignment=Qt.AlignCenter)
         else:
             print(f"Ошибка при обращении к API. Статус код: {response.status_code}")
@@ -218,30 +220,30 @@ class GenresWindow(QMainWindow):
         header_layout = QHBoxLayout(header_widget)
 
         label_main = QLabel("Жанры", self)
-        label_main.setStyleSheet("color: white; font-size: 34px; padding: 10px;")
+        label_main.setStyleSheet(f"color: white; font-size: {font_size1}; padding: 10px;")
         header_layout.addWidget(label_main)
 
         # Label "Рекомендации по фильму" в центре шапки
         label_recommendations_header = QLabel("Рекомендации по жанру", self)
-        label_recommendations_header.setStyleSheet("color: white; font-size: 12px; margin: 10px;")
+        label_recommendations_header.setStyleSheet(f"color: white; font-size: {font_size1}; margin: 10px;")
         header_layout.addWidget(label_recommendations_header)
 
         # Строка поиска с белой линией в шапке
         self.entry_search = QLineEdit(self)
         self.entry_search.setStyleSheet(
-            "border: 2px solid white; border-radius: 5px; padding: 5px; font-size: 12px; color: white;")
+            f"border: 2px solid white; border-radius: 5px; padding: 5px; font-size: 12px; color: white;font-size: {font_size1};")
         self.entry_search.textChanged.connect(self.on_text_changed)  # Подключаем событие textChanged
         header_layout.addWidget(self.entry_search)
 
         # Кнопка поиска с лупой в шапке
         button_search = QPushButton("🔍", self)
         button_search.setStyleSheet(
-            "background-color: #CA1F3D; color: white; border: none; padding: 5px; border-radius: 5px;")
+            f"background-color: #CA1F3D; color: white; border: none; padding: 5px; border-radius: 5px;font-size: {font_size1};")
         button_search.clicked.connect(self.search_movie)
         header_layout.addWidget(button_search)
 
         button_main = QPushButton("На главную", self)
-        button_main.setStyleSheet("background-color: #FFBE00; border: none; padding: 10px; border-radius: 5px;")
+        button_main.setStyleSheet(f"background-color: #FFBE00; border: none; padding: 10px; border-radius: 5px;font-size: {font_size1};")
         button_main.clicked.connect(self.open_main_window)
         self.dialog = self.parent()
 
@@ -290,7 +292,7 @@ class GenresWindow(QMainWindow):
         for i, genre in enumerate(unique_genres):
             genre_button = QPushButton(genre, self)
             genre_button.setStyleSheet(
-                "background-color: white; color: #25182E; padding: 10px; margin: 5px; border-radius: 5px;")
+                f"font-size: {font_size1};background-color: white; color: #25182E; padding: 10px; margin: 5px; border-radius: 5px;")
             genre_button.clicked.connect(
                 lambda event, text=genre: self.on_genre_click(event, text))  # При нажатии выводим название жанра в консоль
             scroll_layout.addWidget(genre_button, row, col)
@@ -334,7 +336,7 @@ class GenresWindow(QMainWindow):
                     widget.setParent(None)
 
             self.title_label1 = QLabel("", self)
-            self.title_label1.setStyleSheet("color: white; font-size: 34px; padding: 10px;")
+            self.title_label1.setStyleSheet(f"font-size: {font_size1};color: white; font-size: 34px; padding: 10px;")
             self.title_label1.setText(f"{selected_genre}")
             self.movies_layout.addWidget(self.title_label1, 0, 0, 1, 4, alignment=Qt.AlignCenter)
             # Добавляем новые данные из JSON
@@ -342,16 +344,16 @@ class GenresWindow(QMainWindow):
             for i, movie in enumerate(json_data[f"{selected_genre}"]):
                 movie_label = QLabel(f"{i + 1}. {movie['title']}", self)
                 movie_label.setStyleSheet(
-                    "background-color: white; color: #25182E; padding: 10px; margin: 5px; border-radius: 5px;")
-                movie_label.setFixedHeight(50)
+                    f"font-size: {font_size1};background-color: white; color: #25182E; padding: 10px; margin: 5px; border-radius: 5px;")
+                movie_label.setFixedHeight(105)
                 self.movies_layout.addWidget(movie_label, row, col)
 
                 score_label = QLabel(f"{movie['w_score']:.2f}", self)
                 score_label.setStyleSheet(
-                    "background-color: #FFBE00; color: #25182E; padding: 10px; margin: 5px; border-radius: 5px;")
+                    f"font-size: {font_size1};background-color: #FFBE00; color: #25182E; padding: 10px; margin: 5px; border-radius: 5px;")
                 score_label.setAlignment(Qt.AlignCenter)
-                score_label.setFixedHeight(50)
-                score_label.setFixedWidth(50)
+                score_label.setFixedHeight(105)
+                score_label.setFixedWidth(105)
                 self.movies_layout.addWidget(score_label, row, col + 1)
 
                 col += 2
@@ -421,15 +423,15 @@ class QuestionWindow(QMainWindow):
 
         # Шапка
         header_widget = QWidget()
-        header_widget.setStyleSheet("background-color: #CA1F3D;")
+        header_widget.setStyleSheet(f"font-size: {font_size1};background-color: #CA1F3D;")
         header_layout = QHBoxLayout(header_widget)
 
         label1 = QLabel("Справка")
-        label1.setStyleSheet("color: #FFFFFF; font-size: 24px; ")
+        label1.setStyleSheet(f"font-size: {font_size1};color: #FFFFFF; font-size: 24px; ")
         header_layout.addWidget(label1)
 
         button1 = QPushButton("На главную")
-        button1.setStyleSheet("background-color: #FFBE00; border: none; padding: 10px; border-radius: 5px;")
+        button1.setStyleSheet(f"font-size: {font_size1}; background-color: #FFBE00; border: none; padding: 10px; border-radius: 5px;")
         button1.clicked.connect(self.open_main_window)
         header_layout.addWidget(button1, alignment=Qt.AlignRight)
 
@@ -453,7 +455,7 @@ class QuestionWindow(QMainWindow):
                        "Ввести наименование жанра в поисковую строку.\n"
                        "Нажать на кнопку поиска(🔎)\n"
                        "Выбрать нужный жанр.")
-        label2.setStyleSheet("color: #FFFFFF; font-size: 16px; padding: 5px")
+        label2.setStyleSheet(f"color: #FFFFFF; font-size: {font_size1}; padding: 5px")
         body_layout.addWidget(label2)
 
         layout.addWidget(body_widget, 2)  # Тело занимает 2/3 высоты окна
