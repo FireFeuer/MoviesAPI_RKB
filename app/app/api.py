@@ -67,10 +67,10 @@ def update_user_movies():
     return users_pivot
 
 
-def update_movie_recommendations(movie_title, users_pivot, num_recommendations=5):
+def update_movie_recommendations(movie_title, users_pivot, num_recommendations=10):
     update_top10()
     # Создаем экземпляр модели
-    model_knn_movies = NearestNeighbors(metric='cosine', algorithm='brute', n_neighbors=5, n_jobs=-1)
+    model_knn_movies = NearestNeighbors(metric='cosine', algorithm='brute', n_neighbors=11, n_jobs=-1)
 
     # Переворачиваем матрицу, чтобы строки соответствовали фильмам, а столбцы пользователям
     movies_pivot_array = users_pivot.T.values

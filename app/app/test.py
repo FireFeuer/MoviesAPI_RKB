@@ -7,11 +7,16 @@ import sys
 import re
 
 
+color_red = "#FFBE00"
+color_white = "white"
+padding1 = "3px"
+font_size1 = "24px"
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
 
-        self.setWindowTitle("Главное окно")
+        self.setWindowTitle("Система рекомендаций фильмов")
         self.setGeometry(100, 100, 700, 500)
         self.movies_data = get_data()
         self.init_ui()
@@ -23,42 +28,42 @@ class MainWindow(QMainWindow):
         header_layout = QHBoxLayout(header_widget)
 
         button_question = QPushButton("I", self)
-        button_question.setStyleSheet("background-color: #FFBE00; border: none; padding: 5px; border-radius: 2px;")
+        button_question.setStyleSheet(f"background-color: {color_red}; border: none; padding: {padding1}; border-radius: 2px;font-size: {font_size1}; ")
         button_question.clicked.connect(self.open_question_window)
         header_layout.addWidget(button_question, alignment=Qt.AlignLeft)
         self.dialog2 = QuestionWindow(self)
 
-        label_main = QLabel("Главная", self)
-        label_main.setStyleSheet("color: white; font-size: 34px; padding: 10px;")
+        label_main = QLabel("Главная страница", self)
+        label_main.setStyleSheet(f"color: {color_white}; font-size: {font_size1}; padding: 10px;")
         header_layout.addWidget(label_main)
 
         # Label "Рекомендации по фильму" в центре шапки
         label_recommendations_header = QLabel("Рекомендации по фильму", self)
-        label_recommendations_header.setStyleSheet("color: white; font-size: 12px; margin: 10px;")
+        label_recommendations_header.setStyleSheet(f"color:  {color_white}; font-size:{font_size1}; margin: 15px;")
         header_layout.addWidget(label_recommendations_header)
 
         # Строка поиска с белой линией в шапке
         self.entry_search = QLineEdit(self)
         self.entry_search.setStyleSheet(
-            "border: 2px solid white; border-radius: 5px; padding: 5px; font-size: 12px; color: white;")
+            f"border: 2px solid white; border-radius: 5px; padding: 5px; font-size:{font_size1}; color: white;")
         self.entry_search.textChanged.connect(self.on_text_changed)  # Подключаем событие textChanged
         header_layout.addWidget(self.entry_search)
 
         # Выпадающее меню (QComboBox)
         self.combo_box = QComboBox(self)
         self.combo_box.setStyleSheet(
-            "border: 2px solid white; border-radius: 5px; padding: 5px; font-size: 12px; color: white;")
+            f"border: 2px solid white; border-radius: 5px; padding: 5px; font-size:{font_size1}; color: white;")
         header_layout.addWidget(self.combo_box)
 
         # Кнопка поиска с лупой в шапке
         button_search = QPushButton("🔍", self)
         button_search.setStyleSheet(
-            "background-color: #CA1F3D; color: white; border: none; padding: 5px; border-radius: 5px;")
+            f"font-size: {font_size1}; background-color: #CA1F3D; color: white; border: none; padding: 5px; border-radius: 5px;")
         button_search.clicked.connect(self.search_movie)
         header_layout.addWidget(button_search)
 
         button_genres = QPushButton("К жанрам", self)
-        button_genres.setStyleSheet("background-color: #FFBE00; border: none; padding: 10px; border-radius: 5px;")
+        button_genres.setStyleSheet(f"font-size: {font_size1}; background-color: #FFBE00; border: none; padding: 10px; border-radius: 5px;")
         button_genres.clicked.connect(self.open_genres_window)
         self.dialog = GenresWindow(self)
 
@@ -88,23 +93,23 @@ class MainWindow(QMainWindow):
 
         # Заголовок
         self.title_label = QLabel("Топ 10 фильмов", self)
-        self.title_label.setStyleSheet("color: white; font-size: 18px; padding: 10px;")
+        self.title_label.setStyleSheet(f"color: white; font-size: {font_size1}; padding: 10px;")
         self.movies_layout.addWidget(self.title_label, 0, 0, 1, 4, alignment=Qt.AlignCenter)
 
         row, col = 1, 0
         for i, movie in enumerate(api_data["Топ 10 фильмов"]):
             movie_label = QLabel(f"{i + 1}. {movie['title']}", self)
             movie_label.setStyleSheet(
-                "background-color: white; color: #25182E; padding: 10px; margin: 5px; border-radius: 5px;")
-            movie_label.setFixedHeight(50)
+                f"background-color: white; color: #25182E; padding: 7px; margin: 7px; border-radius: 5px; font-size: {font_size1};")
+            movie_label.setFixedHeight(105)
             self.movies_layout.addWidget(movie_label, row, col)
 
             score_label = QLabel(f"{movie['w_score']:.2f}", self)
             score_label.setStyleSheet(
-                "background-color: #FFBE00; color: #25182E; padding: 10px; margin: 5px; border-radius: 5px;")
+                f"font-size: {font_size1}; background-color: #FFBE00; color: #25182E; padding: 3px; margin: 7px; border-radius: 5px;")
             score_label.setAlignment(Qt.AlignCenter)
-            score_label.setFixedHeight(50)
-            score_label.setFixedWidth(50)
+            score_label.setFixedHeight(105)
+            score_label.setFixedWidth(105)
             self.movies_layout.addWidget(score_label, row, col + 1)
 
             col += 2
@@ -112,7 +117,7 @@ class MainWindow(QMainWindow):
                 col = 0
                 row += 1
         self.title_label1 = QLabel(" ", self)
-        self.title_label1.setStyleSheet("color: white; font-size: 18px; padding: 10px;")
+        self.title_label1.setStyleSheet(f"color: white; font-size: {font_size1};  padding: 10px;")
         self.movies_layout.addWidget(self.title_label1, 7, 0, 7, 0, alignment=Qt.AlignCenter)
 
     def open_genres_window(self):
@@ -161,6 +166,9 @@ class MainWindow(QMainWindow):
                 if col >= 4:
                     col = 0
                     row += 1
+            self.title_label1 = QLabel(" ", self)
+            self.title_label1.setStyleSheet("color: white; font-size: 18px; padding: 10px;")
+            self.movies_layout.addWidget(self.title_label1, 7, 0, 7, 0, alignment=Qt.AlignCenter)
         else:
             print(f"Ошибка при обращении к API. Статус код: {response.status_code}")
 
@@ -196,7 +204,7 @@ class MainWindow(QMainWindow):
 class GenresWindow(QMainWindow):
     def __init__(self, parent=None):
         super(GenresWindow, self).__init__(parent)
-        self.setWindowTitle("Окно жанров")
+        self.setWindowTitle("Система рекомендаций фильмов")
         self.setGeometry(100, 100, 700, 500)
         self.movies_data = get_data()
         self.init_ui()
@@ -260,6 +268,7 @@ class GenresWindow(QMainWindow):
 
         # Удаляем дубликаты жанров и преобразуем в нижний регистр
         unique_genres = list(set(genres))
+        unique_genres.remove("(no genres listed)")
         unique_genres.sort()  # Сортируем жанры по алфавиту
 
         # Очищаем существующие виджеты
@@ -371,9 +380,9 @@ class GenresWindow(QMainWindow):
         for index, row in self.movies_data.iterrows():
             a = row["genres"].split("|")
             for j in a:
-                genres.append(j.lower())
+                    genres.append(j.lower())
         unique_genres = list(set(genres))
-
+        unique_genres.remove("(no genres listed)")
         # Фильтруем жанры в соответствии с введенным текстом
         filtered_genres = unique_genres
         if text:
@@ -395,13 +404,16 @@ class GenresWindow(QMainWindow):
             if col >= 2:
                 col = 0
                 row += 1
+        self.title_label1 = QLabel(" ", self)
+        self.title_label1.setStyleSheet("color: white; font-size: 18px; padding: 10px;")
+        self.movies_layout.addWidget(self.title_label1, 7, 0, 7, 0, alignment=Qt.AlignCenter)
 
 
 
 class QuestionWindow(QMainWindow):
     def __init__(self, parent=None):
         super(QuestionWindow, self).__init__(parent)
-        self.setWindowTitle("Справка")
+        self.setWindowTitle("Система рекомендаций фильмов")
         self.setGeometry(100, 100, 700, 500)
         central_widget = QWidget(self)
         self.setCentralWidget(central_widget)
