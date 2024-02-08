@@ -102,8 +102,6 @@ def update_movie_recommendations(movie_title, users_pivot, num_recommendations=1
     recommendations_df.drop(columns="movieId", inplace=True)
     recommendations_df.drop(columns="genres", inplace=True)
 
-    print("get_movie_recommendations")
-
     return recommendations_df.head(count_head)
 
 
@@ -183,6 +181,7 @@ def genres():
         unique_genres.sort()  # Сортируем жанры по алфавиту
         result = [{'ganre': index} for index in genres]
         return jsonify(result)
+
 
 @app.route('/movies', methods=['GET'])
 def movies():

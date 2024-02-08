@@ -394,9 +394,9 @@ class GenresWindow(QMainWindow):
         for i, genre in enumerate(filtered_genres):
             genre_label = QLabel(genre.capitalize(), self)
             genre_label.setStyleSheet(
-                "background-color: white; color: #25182E; padding: 10px; margin: 5px; border-radius: 5px;")
-            genre_label.setFixedHeight(50)
-            genre_label.setFixedWidth(150)
+                 f"font-size: {font_size1};background-color: white; color: #25182E; padding: 10px; margin: 5px; border-radius: 5px;")
+            genre_label.setFixedHeight(150)
+            genre_label.setFixedWidth(250)
             genre_label.setAlignment(Qt.AlignCenter)
             self.movies_layout.addWidget(genre_label, row, col)
             genre_label.mousePressEvent = lambda event, text=genre: self.on_genre_click(event, text)
@@ -405,9 +405,9 @@ class GenresWindow(QMainWindow):
             if col >= 2:
                 col = 0
                 row += 1
-        self.title_label1 = QLabel(" ", self)
-        self.title_label1.setStyleSheet("color: white; font-size: 18px; padding: 10px;")
-        self.movies_layout.addWidget(self.title_label1, 7, 0, 7, 0, alignment=Qt.AlignCenter)
+        # self.title_label1 = QLabel(" ", self)
+        # self.title_label1.setStyleSheet("color: white; font-size: 18px; padding: 10px;")
+        # self.movies_layout.addWidget(self.title_label1, 7, 0, 7, 0, alignment=Qt.AlignCenter)
 
 
 class QuestionWindow(QMainWindow):
